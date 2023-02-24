@@ -3,21 +3,30 @@ package io.github._4drian3d.vpacketevents.api.event;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class PacketEvent {
+abstract class PacketEvent {
     private final MinecraftPacket packet;
     private final Player player;
 
-    protected PacketEvent(MinecraftPacket packet, Player player) {
+    protected PacketEvent(final MinecraftPacket packet, final Player player) {
         this.packet = packet;
         this.player = player;
     }
 
-    public MinecraftPacket getPacket() {
+    /**
+     * Get the package involved in this event
+     * @return a packet
+     */
+    public @NotNull MinecraftPacket getPacket() {
         return this.packet;
     }
 
-    public Player getPlayer() {
+    /**
+     * Get the player involved in this event
+     * @return the player
+     */
+    public @NotNull Player getPlayer() {
         return this.player;
     }
 }

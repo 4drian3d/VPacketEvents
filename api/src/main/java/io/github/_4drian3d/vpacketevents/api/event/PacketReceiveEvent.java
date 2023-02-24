@@ -3,17 +3,21 @@ package io.github._4drian3d.vpacketevents.api.event;
 import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
+import org.jetbrains.annotations.NotNull;
 
 import static java.util.Objects.requireNonNull;
 
-public class PacketReceiveEvent
+/**
+ * Event to execute when Velocity has received a registered packet
+ */
+public final class PacketReceiveEvent
         extends PacketEvent
         implements ResultedEvent<ResultedEvent.GenericResult>
 {
     private GenericResult result = GenericResult.allowed();
 
-    public PacketReceiveEvent(MinecraftPacket packet, Player player) {
-        super(packet, player);
+    public PacketReceiveEvent(final @NotNull MinecraftPacket packet, final @NotNull Player player) {
+        super(requireNonNull(packet), requireNonNull(player));
     }
 
     @Override
