@@ -1,6 +1,6 @@
 # VPacketEvents
 
-[![Discord](https://img.shields.io/discord/899740810956910683?color=7289da&label=Discord)](https://discord.gg/5NMMzK5mAn)
+[![Discord](https://img.shields.io/discord/899740810956910683?color=7289da&label=Discord)](https://discord.gg/5NMMzK5mAn) ![](https://img.shields.io/maven-central/v/io.github.4drian3d/vpacketevents-api?style=flat-square)
 
 Manage packets through Velocity's native events
 
@@ -37,10 +37,14 @@ class PacketListener {
 ```kotlin
 
 repositories {
-    maven("jitpack")
+    mavenCentral()
 }
 
 dependencies {
     compileOnly("io.github.4drian3d:vpacketevents:1.0.0")
 }
 ```
+
+
+## Javadocs
+https://javadoc.io/doc/io.github.4drian3d/vpacketevents-api
