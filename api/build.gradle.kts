@@ -31,10 +31,7 @@ publishing {
         create<MavenPublication>("mavenJava") {
             repositories {
                 maven {
-                    credentials {
-                        username = project.property("ossrhUsername") as String
-                        password = project.property("ossrhPassword") as String
-                    }
+                    credentials(PasswordCredentials::class)
                     val central = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                     val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
@@ -45,8 +42,6 @@ publishing {
                         name = "OSSRH"
                         setUrl(central)
                     }
-
-
                 }
             }
             from(components["java"])
