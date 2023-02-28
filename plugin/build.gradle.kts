@@ -14,6 +14,9 @@ dependencies {
 }
 
 tasks {
+    build {
+        dependsOn(shadowJar)
+    }
     compileJava {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(11)
@@ -27,7 +30,7 @@ tasks {
 }
 
 blossom {
-    replaceTokenIn("src/main/java/io/github/_4drian3d/Constants.java")
+    replaceTokenIn("src/main/java/io/github/_4drian3d/vpacketevents/plugin/Constants.java")
     replaceToken("{version}", project.version)
 }
 

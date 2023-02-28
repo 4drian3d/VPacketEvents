@@ -15,7 +15,7 @@ java {
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(11))
-
+/*
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -80,4 +80,4 @@ signing {
     useGpgCmd()
     sign(configurations.archives.get())
     sign(publishing.publications["mavenJava"])
-}
+}*/
