@@ -1,6 +1,5 @@
 package io.github._4drian3d.vpacketevents.api.event;
 
-
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import org.jetbrains.annotations.NotNull;

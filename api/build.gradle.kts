@@ -15,6 +15,16 @@ java {
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(11))
+
+tasks {
+    javadoc {
+        options.encoding = Charsets.UTF_8.name()
+        (options as StandardJavadocDocletOptions).links(
+            "https://jd.advntr.dev/api/4.12.0/",
+            "https://jd.papermc.io/velocity/3.0.0/"
+        )
+    }
+}
 /*
 publishing {
     publications {
