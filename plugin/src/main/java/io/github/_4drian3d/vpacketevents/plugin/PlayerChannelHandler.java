@@ -10,14 +10,17 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
-public class PlayerChannelHandler extends ChannelDuplexHandler {
+public final class PlayerChannelHandler extends ChannelDuplexHandler {
     private final Player player;
     private final EventManager eventManager;
+    private final Logger logger;
 
-    public PlayerChannelHandler(Player player, EventManager eventManager) {
+    public PlayerChannelHandler(Player player, EventManager eventManager, Logger logger) {
         this.player = player;
         this.eventManager = eventManager;
+        this.logger = logger;
     }
     @Override
     public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object packet) throws Exception {
@@ -28,6 +31,10 @@ public class PlayerChannelHandler extends ChannelDuplexHandler {
 
         var result = eventManager.fire(new PacketReceiveEvent((MinecraftPacket) packet, player))
                 .thenApply(ResultedEvent::getResult)
+                .exceptionally(ex -> {
+                    logger.error("An error has occurred while reading packet {}", packet, ex);
+                    return ResultedEvent.GenericResult.denied();
+                })
                 .join();
 
         if (result.isAllowed()) {
@@ -44,6 +51,10 @@ public class PlayerChannelHandler extends ChannelDuplexHandler {
 
         var result = eventManager.fire(new PacketSendEvent((MinecraftPacket) packet, player))
                 .thenApply(ResultedEvent::getResult)
+                .exceptionally(ex -> {
+                    logger.error("An error has occurred while sending packet {}", packet, ex);
+                    return ResultedEvent.GenericResult.denied();
+                })
                 .join();
 
         if (result.isAllowed()) {

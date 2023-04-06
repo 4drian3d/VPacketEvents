@@ -9,6 +9,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.network.Connections;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
 
 @Plugin(
 	id = "vpacketevents",
@@ -21,6 +22,8 @@ public final class VPacketEvents {
 	private static final String KEY = "vpacketevents";
 	@Inject
 	private EventManager eventManager;
+	@Inject
+	private Logger logger;
 
 	@Subscribe
 	void onJoin(final PostLoginEvent event, final Continuation continuation) {
@@ -33,7 +36,7 @@ public final class VPacketEvents {
 		if (event.getLoginStatus() == DisconnectEvent.LoginStatus.CONFLICTING_LOGIN) {
 			return null;
 		}
-		return EventTask.async(() ->removePlayer(event.getPlayer()));
+		return EventTask.async(() -> removePlayer(event.getPlayer()));
 	}
 
 	private void injectPlayer(final Player player) {
@@ -41,7 +44,7 @@ public final class VPacketEvents {
 		p.getConnection()
 				.getChannel()
 				.pipeline()
-				.addBefore(Connections.HANDLER, KEY, new PlayerChannelHandler(player, eventManager));
+				.addBefore(Connections.HANDLER, KEY, new PlayerChannelHandler(player, eventManager, logger));
 	}
 
 	private void removePlayer(final Player player) {
