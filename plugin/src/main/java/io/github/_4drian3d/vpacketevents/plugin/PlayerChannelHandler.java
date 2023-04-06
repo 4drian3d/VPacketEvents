@@ -22,14 +22,15 @@ public final class PlayerChannelHandler extends ChannelDuplexHandler {
         this.eventManager = eventManager;
         this.logger = logger;
     }
+
     @Override
     public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object packet) throws Exception {
-        if (!(packet instanceof MinecraftPacket)) {
+        if (!(packet instanceof final MinecraftPacket minecraftPacket)) {
             super.channelRead(ctx, packet);
             return;
         }
 
-        var result = eventManager.fire(new PacketReceiveEvent((MinecraftPacket) packet, player))
+        final ResultedEvent.GenericResult result = eventManager.fire(new PacketReceiveEvent(minecraftPacket, player))
                 .thenApply(ResultedEvent::getResult)
                 .exceptionally(ex -> {
                     logger.error("An error has occurred while reading packet {}", packet, ex);
@@ -44,12 +45,12 @@ public final class PlayerChannelHandler extends ChannelDuplexHandler {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
-        if(!(packet instanceof MinecraftPacket)) {
+        if (!(packet instanceof final MinecraftPacket minecraftPacket)) {
             super.write(ctx, packet, promise);
             return;
         }
 
-        var result = eventManager.fire(new PacketSendEvent((MinecraftPacket) packet, player))
+        final ResultedEvent.GenericResult result = eventManager.fire(new PacketSendEvent(minecraftPacket, player))
                 .thenApply(ResultedEvent::getResult)
                 .exceptionally(ex -> {
                     logger.error("An error has occurred while sending packet {}", packet, ex);

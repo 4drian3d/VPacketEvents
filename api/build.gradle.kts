@@ -14,8 +14,6 @@ java {
     withJavadocJar()
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(11))
-
 tasks {
     javadoc {
         options.encoding = Charsets.UTF_8.name()

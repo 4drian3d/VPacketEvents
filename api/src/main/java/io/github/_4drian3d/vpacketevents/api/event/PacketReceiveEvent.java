@@ -21,12 +21,13 @@ public final class PacketReceiveEvent
     }
 
     @Override
+    @NotNull
     public GenericResult getResult() {
         return result;
     }
 
     @Override
-    public void setResult(GenericResult result) {
+    public void setResult(final @NotNull GenericResult result) {
         this.result = requireNonNull(result);
     }
 }

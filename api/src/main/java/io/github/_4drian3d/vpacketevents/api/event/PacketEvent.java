@@ -4,7 +4,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import org.jetbrains.annotations.NotNull;
 
-abstract class PacketEvent {
+sealed abstract class PacketEvent permits PacketReceiveEvent, PacketSendEvent {
     private final MinecraftPacket packet;
     private final Player player;
 
