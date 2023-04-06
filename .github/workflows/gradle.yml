@@ -23,3 +23,9 @@ jobs:
           timeout_minutes: 5
           max_attempts: 2
           command: gradle build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: VPacketEvents
+          path: plugin/build/libs/VPacketEvents-*.jar
