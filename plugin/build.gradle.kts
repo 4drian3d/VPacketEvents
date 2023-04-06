@@ -23,6 +23,10 @@ tasks {
     runVelocity {
         velocityVersion(libs.versions.velocity.get())
     }
+    shadowJar {
+        archiveBaseName.set(rootProject.name)
+        archiveClassifier.set("")
+    }
 }
 
 blossom {
