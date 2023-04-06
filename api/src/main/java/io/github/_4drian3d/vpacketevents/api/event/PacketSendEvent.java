@@ -16,6 +16,11 @@ public final class PacketSendEvent
 {
     private @NotNull GenericResult result = GenericResult.allowed();
 
+    /**
+     * PacketSend Event Constructor
+     * @param packet the packet to be sent to the player
+     * @param player the player who will receive the packet
+     */
     public PacketSendEvent(final @NotNull MinecraftPacket packet, final @NotNull Player player) {
         super(requireNonNull(packet), requireNonNull(player));
     }
