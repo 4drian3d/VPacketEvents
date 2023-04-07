@@ -11,13 +11,18 @@ class PacketListener {
     public void onPacketReceive(PacketReceiveEvent event) {
         final MinecraftPacket packet = event.getPacket();
         if (packet instanceof KeyedPlayerCommand commandPacket) {
-           event.setResult(GenericResult.denied());
+            final String commandExecuted = commandPacket.getCommand();
+            event.setResult(GenericResult.denied());
         }
     } 
     
     @Subscribe
     public void onPacketSend(PacketSendEvent event) {
-        // some stuff
+        final MinecraftPacket packet = event.getPacket();
+        if (packet instanceof ServerData serverData) {
+            // some stuff
+            final boolean isSecureChatEnforced = serverData.isSecureChatEnforced();
+        }
     }
 }
 
