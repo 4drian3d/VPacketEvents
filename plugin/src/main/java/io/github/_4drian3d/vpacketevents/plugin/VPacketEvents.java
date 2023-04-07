@@ -1,7 +1,6 @@
 package io.github._4drian3d.vpacketevents.plugin;
 
 import com.google.inject.Inject;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.velocitypowered.api.event.*;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
@@ -19,6 +18,8 @@ import org.slf4j.Logger;
 	description = "VelocityPacketEvents",
 	version = Constants.VERSION,
 	authors = { "4drian3d" },
+	// LimboAPI replaces the Velocity EventManager instance and makes the original instance unusable,
+	// so VPacketEvents is required to be initialized after LimboAPI
 	dependencies = { @Dependency(id = "limboapi", optional = true) }
 )
 public final class VPacketEvents {
@@ -56,8 +57,5 @@ public final class VPacketEvents {
 		channel.eventLoop().submit(() -> {
 			channel.pipeline().remove(KEY);
 		});
-
-		LiteralArgumentBuilder.literal("a")
-				.requiresWithContext((a, b) -> true);
 	}
 }
