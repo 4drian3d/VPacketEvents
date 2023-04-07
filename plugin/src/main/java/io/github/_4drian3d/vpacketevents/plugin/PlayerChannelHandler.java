@@ -1,7 +1,6 @@
 package io.github._4drian3d.vpacketevents.plugin;
 
 import com.velocitypowered.api.event.EventManager;
-import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import io.github._4drian3d.vpacketevents.api.event.PacketReceiveEvent;
@@ -34,12 +33,11 @@ public final class PlayerChannelHandler extends ChannelDuplexHandler {
                 .handle((event, ex) -> {
                     if (ex != null) {
                         logger.error("An error has occurred while reading packet {}", packet, ex);
-                        return ResultedEvent.GenericResult.denied();
+                        return false;
                     } else {
-                        return event.getResult();
+                        return event.getResult().isAllowed();
                     }
                 })
-                .thenApply(ResultedEvent.GenericResult::isAllowed)
                 .join();
 
         if (allowed) {
@@ -58,12 +56,11 @@ public final class PlayerChannelHandler extends ChannelDuplexHandler {
                 .handle((event, ex) -> {
                     if (ex != null) {
                         logger.error("An error has occurred while sending packet {}", packet, ex);
-                        return ResultedEvent.GenericResult.denied();
+                        return false;
                     } else {
-                        return event.getResult();
+                        return event.getResult().isAllowed();
                     }
                 })
-                .thenApply(ResultedEvent.GenericResult::isAllowed)
                 .join();
 
         if (allowed) {
