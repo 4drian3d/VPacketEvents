@@ -30,15 +30,19 @@ public final class PlayerChannelHandler extends ChannelDuplexHandler {
             return;
         }
 
-        final ResultedEvent.GenericResult result = eventManager.fire(new PacketReceiveEvent(minecraftPacket, player))
-                .thenApply(ResultedEvent::getResult)
-                .exceptionally(ex -> {
-                    logger.error("An error has occurred while reading packet {}", packet, ex);
-                    return ResultedEvent.GenericResult.denied();
+        final boolean allowed = eventManager.fire(new PacketReceiveEvent(minecraftPacket, player))
+                .handle((event, ex) -> {
+                    if (ex != null) {
+                        logger.error("An error has occurred while reading packet {}", packet, ex);
+                        return ResultedEvent.GenericResult.denied();
+                    } else {
+                        return event.getResult();
+                    }
                 })
+                .thenApply(ResultedEvent.GenericResult::isAllowed)
                 .join();
 
-        if (result.isAllowed()) {
+        if (allowed) {
             super.channelRead(ctx, packet);
         }
     }
@@ -50,15 +54,19 @@ public final class PlayerChannelHandler extends ChannelDuplexHandler {
             return;
         }
 
-        final ResultedEvent.GenericResult result = eventManager.fire(new PacketSendEvent(minecraftPacket, player))
-                .thenApply(ResultedEvent::getResult)
-                .exceptionally(ex -> {
-                    logger.error("An error has occurred while sending packet {}", packet, ex);
-                    return ResultedEvent.GenericResult.denied();
+        final boolean allowed = eventManager.fire(new PacketSendEvent(minecraftPacket, player))
+                .handle((event, ex) -> {
+                    if (ex != null) {
+                        logger.error("An error has occurred while sending packet {}", packet, ex);
+                        return ResultedEvent.GenericResult.denied();
+                    } else {
+                        return event.getResult();
+                    }
                 })
+                .thenApply(ResultedEvent.GenericResult::isAllowed)
                 .join();
 
-        if (result.isAllowed()) {
+        if (allowed) {
             super.write(ctx, packet, promise);
         }
     }
