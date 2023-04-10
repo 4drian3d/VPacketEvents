@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.github.4drian3d:vpacketevents-api:1.0.1")
+    compileOnly("io.github.4drian3d:vpacketevents-api:1.0.2")
 }
 ```
 
