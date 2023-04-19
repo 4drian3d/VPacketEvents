@@ -5,8 +5,7 @@ import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.StateRegistry;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -21,14 +20,13 @@ import static java.util.Objects.requireNonNull;
 // https://github.com/PaperMC/Velocity/blob/e364e2c7d1918ec7c20986fb640f3f6a64127bb0/proxy/src/main/java/com/velocitypowered/proxy/protocol/StateRegistry.java
 
 /**
- * Process of registering a packet in the internal Velocity StateRegistry's PacketRegistry
+ * Process of registering a packet in the internal Velocity State's PacketRegistry
  * <pre>
  *   // UpdateTeamsPacket registration
- *   PacketRegister.{@literal <UpdateTeamsPacket>}start()
+ *   PacketRegistration.of(UpdateTeamsPacket.class)
  *           .direction(ProtocolUtils.Direction.CLIENTBOUND)
  *           .packetSupplier(UpdateTeamsPacket::new)
  *           .stateRegistry(StateRegistry.PLAY)
- *           .packetClass(UpdateTeamsPacket.class)
  *           .mapping(0x47, MINECRAFT_1_13, false)
  *           .mapping(0x4B, MINECRAFT_1_14, false)
  *           .mapping(0x4C, MINECRAFT_1_15, false)
@@ -38,36 +36,25 @@ import static java.util.Objects.requireNonNull;
  *           .mapping(0x5A, MINECRAFT_1_19_4, false)
  *           .register();
  * </pre>
+ *
  * @param <P> the packet class
  */
 @SuppressWarnings("unused")
-@DefaultQualifier(NonNull.class)
-public final class PacketRegister<P extends MinecraftPacket> {
+public final class PacketRegistration<P extends MinecraftPacket> {
 
-    private @MonotonicNonNull Class<@NonNull P> packetClass;
-    private @MonotonicNonNull Supplier<@NonNull P> packetSupplier;
+    private final @NotNull Class<@NotNull P> packetClass;
+    private @MonotonicNonNull Supplier<@NotNull P> packetSupplier;
     private ProtocolUtils.@MonotonicNonNull Direction direction;
     private @MonotonicNonNull StateRegistry stateRegistry;
     private final List<StateRegistry.PacketMapping> mappings = new ArrayList<>();
 
-    /**
-     * Sets the class of this Packet registration
-     *
-     * @param packetClass this packet class
-     * @return this packet registration
-     */
-    public PacketRegister<P> packetClass(final Class<P> packetClass) {
-        requireNonNull(packetClass);
-        this.packetClass = packetClass;
-        return this;
-    }
 
     /**
      * Sets the supplier of this Packet
      * <p>This supplier will be used to generate the new packets to serialize,
      * which you can use in PacketSentEvent and PacketReceiveEvent events</p>
      * <pre>
-     *     PacketRegister.{@literal <SomeMinecraftPacket>}start()
+     *     PacketRegistration.of(SomeMinecraftPacket.class)
      *         .packetSupplier(SomeMinecraftPacket::new);
      *     </pre>
      *
@@ -76,8 +63,8 @@ public final class PacketRegister<P extends MinecraftPacket> {
      * @see io.github._4drian3d.vpacketevents.api.event.PacketReceiveEvent
      * @see io.github._4drian3d.vpacketevents.api.event.PacketSendEvent
      */
-    public PacketRegister<P> packetSupplier(final Supplier<P> packetSupplier) {
-        requireNonNull(packetSupplier);
+    public PacketRegistration<P> packetSupplier(final @NotNull Supplier<@NotNull P> packetSupplier) {
+        requireNonNull(packetSupplier, "packet supplier cannot be null");
         this.packetSupplier = packetSupplier;
         return this;
     }
@@ -89,8 +76,8 @@ public final class PacketRegister<P extends MinecraftPacket> {
      * @param direction the packet direction
      * @return this packet registration
      */
-    public PacketRegister<P> direction(final ProtocolUtils.Direction direction) {
-        requireNonNull(direction);
+    public PacketRegistration<P> direction(final ProtocolUtils.@NotNull Direction direction) {
+        requireNonNull(direction, "direction cannot be null");
         this.direction = direction;
         return this;
     }
@@ -107,8 +94,8 @@ public final class PacketRegister<P extends MinecraftPacket> {
      * @param stateRegistry the state registry
      * @return this packet registration
      */
-    public PacketRegister<P> stateRegistry(final StateRegistry stateRegistry) {
-        requireNonNull(stateRegistry);
+    public PacketRegistration<P> stateRegistry(final @NotNull StateRegistry stateRegistry) {
+        requireNonNull(stateRegistry, "state registry cannot be null");
         this.stateRegistry = stateRegistry;
         return this;
     }
@@ -122,20 +109,22 @@ public final class PacketRegister<P extends MinecraftPacket> {
      * @param encodeOnly               When true packet decoding will be disabled
      * @param lastValidProtocolVersion Last version this Mapping is valid at
      * @return this packet registration
+     * @apiNote this must be the last mapping assigned, otherwise, an error will occur when trying to register the mapping
      */
-    public PacketRegister<P> mapping(
+    public PacketRegistration<P> mapping(
             final int id,
-            final ProtocolVersion version,
-            final ProtocolVersion lastValidProtocolVersion,
+            final @NotNull ProtocolVersion version,
+            final @NotNull ProtocolVersion lastValidProtocolVersion,
             final boolean encodeOnly
     ) {
-        requireNonNull(version);
+        requireNonNull(version, "protocol version cannot be null");
+        requireNonNull(lastValidProtocolVersion, "last valid protocol version cannot be null");
         try {
             final StateRegistry.PacketMapping mapping = (StateRegistry.PacketMapping) PACKET_MAPPING$mapLast.invoke(
                     id, version, lastValidProtocolVersion, encodeOnly);
             this.mappings.add(mapping);
         } catch (Throwable t) {
-            throw new RuntimeException("");
+            throw new RuntimeException(t);
         }
         return this;
     }
@@ -148,17 +137,18 @@ public final class PacketRegister<P extends MinecraftPacket> {
      * @param encodeOnly When true packet decoding will be disabled
      * @return this packet registration
      */
-    public PacketRegister<P> mapping(
+    public PacketRegistration<P> mapping(
             final int id,
-            final ProtocolVersion version,
+            final @NotNull ProtocolVersion version,
             final boolean encodeOnly
     ) {
+        requireNonNull(version, "protocol version cannot be null");
         try {
             final StateRegistry.PacketMapping mapping = (StateRegistry.PacketMapping) PACKET_MAPPING$map.invoke(
                     id, version, encodeOnly);
             this.mappings.add(mapping);
         } catch (Throwable t) {
-            throw new RuntimeException("");
+            throw new RuntimeException(t);
         }
         return this;
     }
@@ -166,22 +156,19 @@ public final class PacketRegister<P extends MinecraftPacket> {
     /**
      * Registers the packet in the PacketRegistry of a supplied State
      *
-     * @throws NullPointerException in case the packet class,
-     * packet supplier, packet direction or state registry have not been assigned
+     * @throws NullPointerException in case the packet supplier, {@link ProtocolUtils.Direction} or {@link StateRegistry} have not been assigned
      * @throws IllegalStateException if no mappings have been assigned to this packet
-     * @see #packetClass(Class)
      * @see #direction(ProtocolUtils.Direction)
      * @see #stateRegistry(StateRegistry)
      * @see #packetSupplier(Supplier)
      * @see #mapping(int, ProtocolVersion, boolean)
      */
     public void register() {
-        requireNonNull(this.packetClass);
-        requireNonNull(this.direction);
-        requireNonNull(this.packetSupplier);
-        requireNonNull(this.stateRegistry);
+        requireNonNull(this.direction, "packet direction has not been assigned");
+        requireNonNull(this.packetSupplier, "packet supplier has not been assigned");
+        requireNonNull(this.stateRegistry, "state registry has not been assigned");
         if (this.mappings.isEmpty()) {
-            throw new IllegalStateException("Empty mappings");
+            throw new IllegalStateException("You must provide at least one packet mapping");
         }
         try {
             final StateRegistry.PacketRegistry packetRegistry = direction == ProtocolUtils.Direction.CLIENTBOUND
@@ -194,7 +181,7 @@ public final class PacketRegister<P extends MinecraftPacket> {
                     mappings.toArray(StateRegistry.PacketMapping[]::new)
             );
         } catch (Throwable t) {
-            throw new RuntimeException("");
+            throw new RuntimeException(t);
         }
     }
 
@@ -204,11 +191,13 @@ public final class PacketRegister<P extends MinecraftPacket> {
      * @return a new Packet Registration of the type P
      * @param <P> the packet class to register
      */
-    public static <P extends MinecraftPacket> PacketRegister<P> start() {
-        return new PacketRegister<>();
+    public static <P extends MinecraftPacket> PacketRegistration<P> of(Class<P> packetClass) {
+        return new PacketRegistration<>(packetClass);
     }
 
-    private PacketRegister() {}
+    private PacketRegistration(final @NotNull Class<P> packetClass) {
+        this.packetClass = packetClass;
+    }
 
     private static final MethodHandle STATE_REGISTRY$clientBound;
     private static final MethodHandle STATE_REGISTRY$serverBound;

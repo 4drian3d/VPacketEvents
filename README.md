@@ -27,11 +27,10 @@ class PacketListener {
     
     public void registerMyPacket() {
         // UpdateTeamsPacket registration
-        PacketRegister.<UpdateTeamsPacket>start()
+        PacketRegistration.of(UpdateTeamsPacket)
                 .direction(Direction.CLIENTBOUND)
                 .packetSupplier(UpdateTeamsPacket::new)
                 .stateRegistry(StateRegistry.PLAY)
-                .packetClass(UpdateTeamsPacket.class)
                 .mapping(0x47, MINECRAFT_1_13, false)
                 .mapping(0x4B, MINECRAFT_1_14, false)
                 .mapping(0x4C, MINECRAFT_1_15, false)
