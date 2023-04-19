@@ -103,13 +103,14 @@ public final class PacketRegistration<P extends MinecraftPacket> {
     /**
      *
      * Adds a PacketMapping using the provided arguments.
+     * <p><b>This must be the last mapping assigned, otherwise,
+     * an error will occur when trying to register the mapping</b>
      *
      * @param id                       Packet Id
      * @param version                  Protocol version
      * @param encodeOnly               When true packet decoding will be disabled
      * @param lastValidProtocolVersion Last version this Mapping is valid at
      * @return this packet registration
-     * @apiNote this must be the last mapping assigned, otherwise, an error will occur when trying to register the mapping
      */
     public PacketRegistration<P> mapping(
             final int id,
