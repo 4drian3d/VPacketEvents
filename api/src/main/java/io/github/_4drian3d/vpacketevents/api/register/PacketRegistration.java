@@ -188,8 +188,9 @@ public final class PacketRegistration<P extends MinecraftPacket> {
     /**
      * Initiates a new packet registration process
      *
-     * @return a new Packet Registration of the type P
      * @param <P> the packet class to register
+     * @param packetClass the packet class
+     * @return a new Packet Registration of the type P
      */
     public static <P extends MinecraftPacket> PacketRegistration<P> of(Class<P> packetClass) {
         return new PacketRegistration<>(packetClass);
