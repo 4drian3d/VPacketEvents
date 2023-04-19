@@ -24,6 +24,22 @@ class PacketListener {
             final boolean isSecureChatEnforced = serverData.isSecureChatEnforced();
         }
     }
+    
+    public void registerMyPacket() {
+        // UpdateTeamsPacket registration
+        PacketRegistration.of(UpdateTeamsPacket)
+                .direction(Direction.CLIENTBOUND)
+                .packetSupplier(UpdateTeamsPacket::new)
+                .stateRegistry(StateRegistry.PLAY)
+                .mapping(0x47, MINECRAFT_1_13, false)
+                .mapping(0x4B, MINECRAFT_1_14, false)
+                .mapping(0x4C, MINECRAFT_1_15, false)
+                .mapping(0x55, MINECRAFT_1_17, false)
+                .mapping(0x58, MINECRAFT_1_19_1, false)
+                .mapping(0x56, MINECRAFT_1_19_3, false)
+                .mapping(0x5A, MINECRAFT_1_19_4, false)
+                .register();
+    }
 }
 
 ```
