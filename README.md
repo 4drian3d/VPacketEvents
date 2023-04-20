@@ -2,7 +2,7 @@
 
 [![Discord](https://img.shields.io/discord/899740810956910683?color=7289da&label=Discord)](https://discord.gg/5NMMzK5mAn) ![](https://img.shields.io/maven-central/v/io.github.4drian3d/vpacketevents-api?style=flat-square)
 
-Manage packets through Velocity's native events
+Manage and register packets through Velocity's native events
 
 ```java
 
@@ -27,7 +27,7 @@ class PacketListener {
     
     public void registerMyPacket() {
         // UpdateTeamsPacket registration
-        PacketRegistration.of(UpdateTeamsPacket)
+        PacketRegistration.of(UpdateTeamsPacket.class)
                 .direction(Direction.CLIENTBOUND)
                 .packetSupplier(UpdateTeamsPacket::new)
                 .stateRegistry(StateRegistry.PLAY)
@@ -62,7 +62,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.github.4drian3d:vpacketevents-api:1.0.2")
+    compileOnly("io.github.4drian3d:vpacketevents-api:1.1.0")
 }
 ```
 
