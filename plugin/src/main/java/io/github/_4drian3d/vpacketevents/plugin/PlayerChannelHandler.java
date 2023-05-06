@@ -11,19 +11,26 @@ import io.netty.channel.ChannelPromise;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-public final class PlayerChannelHandler extends ChannelDuplexHandler {
+final class PlayerChannelHandler extends ChannelDuplexHandler {
     private final Player player;
     private final EventManager eventManager;
     private final Logger logger;
 
-    public PlayerChannelHandler(Player player, EventManager eventManager, Logger logger) {
+    PlayerChannelHandler(
+            final Player player,
+            final EventManager eventManager,
+            final Logger logger
+    ) {
         this.player = player;
         this.eventManager = eventManager;
         this.logger = logger;
     }
 
     @Override
-    public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object packet) throws Exception {
+    public void channelRead(
+            final @NotNull ChannelHandlerContext ctx,
+            final @NotNull Object packet
+    ) throws Exception {
         if (!(packet instanceof final MinecraftPacket minecraftPacket)) {
             super.channelRead(ctx, packet);
             return;
@@ -46,7 +53,11 @@ public final class PlayerChannelHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
+    public void write(
+            final ChannelHandlerContext ctx,
+            final Object packet,
+            final ChannelPromise promise
+    ) throws Exception {
         if (!(packet instanceof final MinecraftPacket minecraftPacket)) {
             super.write(ctx, packet, promise);
             return;
