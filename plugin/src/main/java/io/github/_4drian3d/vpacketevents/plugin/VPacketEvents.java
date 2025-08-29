@@ -5,7 +5,7 @@ import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
-import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
@@ -35,7 +35,7 @@ public final class VPacketEvents {
 
     @Subscribe
     public void onProxyInitialization(final ProxyInitializeEvent event) {
-        this.eventManager.register(this, PostLoginEvent.class, new LoginListener(eventManager, logger));
+        this.eventManager.register(this, LoginEvent.class, new LoginListener(eventManager, logger));
         this.eventManager.register(this, DisconnectEvent.class, PostOrder.LAST, new DisconnectListener());
     }
 }
