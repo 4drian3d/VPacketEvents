@@ -17,10 +17,7 @@ java {
 tasks {
     javadoc {
         options.encoding = Charsets.UTF_8.name()
-        (options as StandardJavadocDocletOptions).links(
-            "https://jd.advntr.dev/api/${libs.versions.velocity.get()}/",
-            "https://jd.papermc.io/velocity/3.4.0/"
-        )
+        (options as StandardJavadocDocletOptions).links("https://jd.papermc.io/velocity/3.4.0/")
     }
 }
 /*
