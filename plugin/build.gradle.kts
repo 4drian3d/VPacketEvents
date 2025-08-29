@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.runvelocity)
     alias(libs.plugins.blossom)
     alias(libs.plugins.shadow)
+    alias(libs.plugins.idea.ext)
 }
 
 dependencies {
@@ -29,7 +30,12 @@ tasks {
     }
 }
 
-blossom {
-    replaceTokenIn("src/main/java/io/github/_4drian3d/vpacketevents/plugin/Constants.java")
-    replaceToken("{version}", project.version)
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("version", project.version.toString())
+            }
+        }
+    }
 }

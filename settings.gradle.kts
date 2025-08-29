@@ -6,3 +6,7 @@ arrayOf("api", "plugin").forEach {
     include("vpacketevents-$it")
     project(":vpacketevents-$it").projectDir = file(it)
 }
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}

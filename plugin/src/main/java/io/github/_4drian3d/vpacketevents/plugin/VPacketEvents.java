@@ -13,6 +13,7 @@ import com.velocitypowered.proxy.network.Connections;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 
+@SuppressWarnings("ClassCanBeRecord")
 @Plugin(
         id = "vpacketevents",
         name = "VPacketEvents",
