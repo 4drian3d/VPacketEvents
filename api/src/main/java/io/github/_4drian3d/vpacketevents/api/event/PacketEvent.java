@@ -14,7 +14,7 @@ sealed abstract class PacketEvent permits PacketReceiveEvent, PacketSendEvent {
     }
 
     /**
-     * Get the package involved in this event
+     * Get the packet involved in this event
      * @return a packet
      */
     public @NotNull MinecraftPacket getPacket() {
