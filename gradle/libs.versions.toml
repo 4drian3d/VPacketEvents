@@ -6,7 +6,7 @@ metadata.format.version = "1.1"
 velocity = "3.4.0-SNAPSHOT"
 # Gradle Plugins
 blossom = "2.1.0"
-shadow = "9.0.2"
+shadow = "9.1.0"
 runvelocity = "2.3.1"
 
 netty = "4.2.4.Final"
