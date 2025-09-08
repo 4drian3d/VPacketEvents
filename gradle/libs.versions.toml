@@ -7,7 +7,7 @@ velocity = "3.4.0-SNAPSHOT"
 # Gradle Plugins
 blossom = "2.1.0"
 shadow = "9.1.0"
-runvelocity = "2.3.1"
+runvelocity = "3.0.0"
 
 netty = "4.2.5.Final"
 
