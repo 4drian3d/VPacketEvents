@@ -9,7 +9,7 @@ blossom = "2.1.0"
 shadow = "9.1.0"
 runvelocity = "3.0.0"
 
-netty = "4.2.5.Final"
+netty = "4.2.6.Final"
 
 
 [libraries]
