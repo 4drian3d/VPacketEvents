@@ -8,9 +8,10 @@ import io.github._4drian3d.vpacketevents.api.event.PacketSendEvent;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 
+@NullMarked
 final class PlayerChannelHandler extends ChannelDuplexHandler {
     private final Player player;
     private final EventManager eventManager;
@@ -28,8 +29,8 @@ final class PlayerChannelHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelRead(
-            final @NotNull ChannelHandlerContext ctx,
-            final @NotNull Object packet
+            final ChannelHandlerContext ctx,
+            final Object packet
     ) throws Exception {
         if (!(packet instanceof final MinecraftPacket minecraftPacket)) {
             super.channelRead(ctx, packet);

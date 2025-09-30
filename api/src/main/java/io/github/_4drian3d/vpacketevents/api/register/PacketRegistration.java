@@ -5,7 +5,7 @@ import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.StateRegistry;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -40,10 +40,11 @@ import static java.util.Objects.requireNonNull;
  * @param <P> the packet class
  */
 @SuppressWarnings("unused")
+@NullMarked
 public final class PacketRegistration<P extends MinecraftPacket> {
 
-    private final @NotNull Class<@NotNull P> packetClass;
-    private @MonotonicNonNull Supplier<@NotNull P> packetSupplier;
+    private final Class<P> packetClass;
+    private @MonotonicNonNull Supplier<P> packetSupplier;
     private ProtocolUtils.@MonotonicNonNull Direction direction;
     private @MonotonicNonNull StateRegistry stateRegistry;
     private final List<StateRegistry.PacketMapping> mappings = new ArrayList<>();
@@ -63,7 +64,7 @@ public final class PacketRegistration<P extends MinecraftPacket> {
      * @see io.github._4drian3d.vpacketevents.api.event.PacketReceiveEvent
      * @see io.github._4drian3d.vpacketevents.api.event.PacketSendEvent
      */
-    public PacketRegistration<P> packetSupplier(final @NotNull Supplier<@NotNull P> packetSupplier) {
+    public PacketRegistration<P> packetSupplier(final Supplier<P> packetSupplier) {
         requireNonNull(packetSupplier, "packet supplier cannot be null");
         this.packetSupplier = packetSupplier;
         return this;
@@ -76,7 +77,7 @@ public final class PacketRegistration<P extends MinecraftPacket> {
      * @param direction the packet direction
      * @return this packet registration
      */
-    public PacketRegistration<P> direction(final ProtocolUtils.@NotNull Direction direction) {
+    public PacketRegistration<P> direction(final ProtocolUtils.Direction direction) {
         requireNonNull(direction, "direction cannot be null");
         this.direction = direction;
         return this;
@@ -94,7 +95,7 @@ public final class PacketRegistration<P extends MinecraftPacket> {
      * @param stateRegistry the state registry
      * @return this packet registration
      */
-    public PacketRegistration<P> stateRegistry(final @NotNull StateRegistry stateRegistry) {
+    public PacketRegistration<P> stateRegistry(final StateRegistry stateRegistry) {
         requireNonNull(stateRegistry, "state registry cannot be null");
         this.stateRegistry = stateRegistry;
         return this;
@@ -114,8 +115,8 @@ public final class PacketRegistration<P extends MinecraftPacket> {
      */
     public PacketRegistration<P> mapping(
             final int id,
-            final @NotNull ProtocolVersion version,
-            final @NotNull ProtocolVersion lastValidProtocolVersion,
+            final ProtocolVersion version,
+            final ProtocolVersion lastValidProtocolVersion,
             final boolean encodeOnly
     ) {
         requireNonNull(version, "protocol version cannot be null");
@@ -140,7 +141,7 @@ public final class PacketRegistration<P extends MinecraftPacket> {
      */
     public PacketRegistration<P> mapping(
             final int id,
-            final @NotNull ProtocolVersion version,
+            final ProtocolVersion version,
             final boolean encodeOnly
     ) {
         requireNonNull(version, "protocol version cannot be null");
@@ -191,13 +192,27 @@ public final class PacketRegistration<P extends MinecraftPacket> {
      *
      * @param <P> the packet class to register
      * @param packetClass the packet class
-     * @return a new Packet Registration of the type P
+     * @return a new Packet Registration of the type {@link P}
+     * @since 1.3.0
      */
-    public static <P extends MinecraftPacket> PacketRegistration<P> of(Class<P> packetClass) {
+    public static <P extends MinecraftPacket> PacketRegistration<P> ofPacket(Class<P> packetClass) {
         return new PacketRegistration<>(packetClass);
     }
 
-    private PacketRegistration(final @NotNull Class<P> packetClass) {
+    /**
+     * Initiates a new packet registration process
+     *
+     * @param <P> the packet class to register
+     * @param packetClass the packet class
+     * @return a new Packet Registration of the type {@link P}
+     * @deprecated use {@link #ofPacket}
+     */
+    @Deprecated
+    public static <P extends MinecraftPacket> PacketRegistration<P> of(Class<P> packetClass) {
+      return new PacketRegistration<>(packetClass);
+    }
+
+    private PacketRegistration(final Class<P> packetClass) {
         this.packetClass = packetClass;
     }
 

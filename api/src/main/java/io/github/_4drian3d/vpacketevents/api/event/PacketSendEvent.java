@@ -3,36 +3,36 @@ package io.github._4drian3d.vpacketevents.api.event;
 import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import static java.util.Objects.requireNonNull;
 
 /**
  * Event to execute when a packet is sent to a player
  */
+@NullMarked
 public final class PacketSendEvent
         extends PacketEvent
         implements ResultedEvent<ResultedEvent.GenericResult>
 {
-    private @NotNull GenericResult result = GenericResult.allowed();
+    private GenericResult result = GenericResult.allowed();
 
     /**
      * PacketSend Event Constructor
      * @param packet the packet to be sent to the player
      * @param player the player who will receive the packet
      */
-    public PacketSendEvent(final @NotNull MinecraftPacket packet, final @NotNull Player player) {
+    public PacketSendEvent(final MinecraftPacket packet, final Player player) {
         super(requireNonNull(packet), requireNonNull(player));
     }
 
     @Override
-    @NotNull
     public GenericResult getResult() {
         return result;
     }
 
     @Override
-    public void setResult(final @NotNull GenericResult result) {
+    public void setResult(final GenericResult result) {
         this.result = requireNonNull(result);
     }
 }
