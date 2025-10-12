@@ -5,7 +5,7 @@ metadata.format.version = "1.1"
 # CompileOnly dependencies
 velocity = "3.4.0-SNAPSHOT"
 # Gradle Plugins
-blossom = "2.1.0"
+blossom = "2.2.0"
 shadow = "9.2.2"
 runvelocity = "3.0.2"
 
