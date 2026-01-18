@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("com.vanniktech.maven.publish") version "0.35.0"
+    id("com.vanniktech.maven.publish") version "0.36.0"
 }
 
 dependencies {
